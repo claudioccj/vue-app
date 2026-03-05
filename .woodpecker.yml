@@ -1,0 +1,6 @@
+steps:
+  - name: build
+    image: node:20-alpine
+    commands:
+      - npm install
+      - npm run build
