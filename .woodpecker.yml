@@ -2,7 +2,7 @@ steps:
   - name: build-and-push
     image: woodpeckerci/plugin-docker-buildx
     settings:
-      repo: ghcr.io/<TU_USUARIO>/vue-app
+      repo: ghcr.io/claudioccj/vue-app
       registry: ghcr.io
       username:
         from_secret: GITHUB_USERNAME
@@ -14,15 +14,15 @@ steps:
 
   - name: update-deployment
     image: alpine/git
-    commands:
-      - apk add --no-cache git
-      - git config user.email "ci@woodpecker"
-      - git config user.name "Woodpecker CI"
-      - git remote set-url origin https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/<TU_USUARIO>/vue-app.git
-      - sed -i "s|ghcr.io/<TU_USUARIO>/vue-app:.*|ghcr.io/<TU_USUARIO>/vue-app:${CI_COMMIT_SHA}|g" k8s/deployment.yaml
-      - git add k8s/deployment.yaml
-      - git commit -m "ci: update image to ${CI_COMMIT_SHA}"
-      - git push
     secrets:
       - GITHUB_USERNAME
       - GITHUB_TOKEN
+    commands:
+      - apk add --no-cache git
+      - git config user.email ci@woodpecker
+      - git config user.name Woodpecker
+      - git remote set-url origin https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/claudioccj/vue-app.git
+      - sed -i "s|ghcr.io/claudioccj/vue-app:.*|ghcr.io/claudioccj/vue-app:$CI_COMMIT_SHA|g" k8s/deployment.yaml
+      - git add k8s/deployment.yaml
+      - git diff --cached --quiet || git commit -m "ci update image to $CI_COMMIT_SHA"
+      - git push
