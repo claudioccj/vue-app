@@ -1,6 +1,23 @@
 steps:
-  - name: build
-    image: node:20-alpine
+  - name: build-and-push
+    image: woodpeckerci/plugin-docker-buildx
+    settings:
+      repo: ghcr.io/claudioccj/vue-app
+      registry: ghcr.io
+      username:
+        from_secret: GITHUB_USERNAME
+      password:
+        from_secret: GITHUB_TOKEN
+      tags:
+        - latest
+        - ${CI_COMMIT_SHA}
+
+  - name: update-deployment
+    image: alpine/git
     commands:
-      - npm install
-      - npm run build
+      - sed -i "s|ghcr.io/claudioccj/vue-app:.*|ghcr.io/claudioccj/vue-app:${CI_COMMIT_SHA}|g" k8s/deployment.yaml
+      - git config user.email "ci@woodpecker"
+      - git config user.name "Woodpecker CI"
+      - git add k8s/deployment.yaml
+      - git commit -m "ci: update image to ${CI_COMMIT_SHA}"
+      - git push
