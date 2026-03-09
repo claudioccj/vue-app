@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: vue-app
-          image: ghcr.io/claudioccj/vue-app:1743a6ea92bd4f98f9c4cf75a07f0781f13d5974
+          image: ghcr.io/claudioccj/vue-app:774dd56c9d1056fa1ccc80704dbc01079f0ce175
           ports:
             - containerPort: 80
           imagePullPolicy: Always
