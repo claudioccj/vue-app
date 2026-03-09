@@ -37,4 +37,4 @@ steps:
       - sed -i "s|ghcr.io/claudioccj/vue-app:.*|ghcr.io/claudioccj/vue-app:$CI_COMMIT_SHA|g" k8s/deployment.yaml
       - git add k8s/deployment.yaml
       - git diff --cached --quiet || git commit -m "ci update image to $CI_COMMIT_SHA"
-      - git push
+      - git push --set-upstream origin main
