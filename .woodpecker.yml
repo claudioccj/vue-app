@@ -36,5 +36,5 @@ steps:
       - git remote set-url origin https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/claudioccj/vue-app.git
       - sed -i "s|ghcr.io/claudioccj/vue-app:.*|ghcr.io/claudioccj/vue-app:$CI_COMMIT_SHA|g" k8s/deployment.yaml
       - git add k8s/deployment.yaml
-      - git diff --cached --quiet || git commit -m "ci update image to $CI_COMMIT_SHA"
+      - git diff --cached --quiet || git commit -m "ci update image to $CI_COMMIT_SHA [skip ci]"
       - git push --set-upstream origin main
